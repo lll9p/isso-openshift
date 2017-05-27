@@ -19,10 +19,6 @@ application = make_app(isso_config.load('isso.conf'))
 print('LOADING MODULE %s' % __file__)
 
 
-ip = os.environ['OPENSHIFT_PYTHON_IP']
-port = int(os.environ['OPENSHIFT_PYTHON_PORT'])
-
-
 def number_of_workers():
     return (multiprocessing.cpu_count() * 2) + 1
 
@@ -46,7 +42,7 @@ class StandaloneApplication(gunicorn.app.base.BaseApplication):
 
 if __name__ == '__main__':
     options = {
-        'bind': '%s:%s' % (ip, port),
+        'bind': ':8080',
         'workers': number_of_workers(),
     }
     StandaloneApplication(application, options).run()
