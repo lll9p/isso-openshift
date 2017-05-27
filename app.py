@@ -7,7 +7,6 @@
 # 2009-2015 (c) Paul J. Davis <paul.joseph.davis@gmail.com>
 
 import os
-import sys
 import multiprocessing
 
 import gunicorn.app.base
@@ -15,14 +14,10 @@ from gunicorn.six import iteritems
 from isso import make_app
 from isso import config as isso_config
 
-application = make_app(isso_config.load('production.cfg'))
+application = make_app(isso_config.load('isso.conf'))
 
-virtenv = os.environ['OPENSHIFT_PYTHON_DIR'] + '/virtenv/'
-virtualenv = os.path.join(virtenv, 'bin/activate_this.py')
-try:
-    execfile(virtualenv, dict(__file__=virtualenv))
-except IOError:
-    pass
+print('LOADING MODULE %s' % __file__)
+
 
 ip = os.environ['OPENSHIFT_PYTHON_IP']
 port = int(os.environ['OPENSHIFT_PYTHON_PORT'])
@@ -47,6 +42,7 @@ class StandaloneApplication(gunicorn.app.base.BaseApplication):
 
     def load(self):
         return self.application
+
 
 if __name__ == '__main__':
     options = {

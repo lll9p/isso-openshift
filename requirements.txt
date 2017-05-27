@@ -1,5 +1,3 @@
-gunicorn==19.4.5
-passlib==1.6.5
-configparser==3.3.0r2
-ipaddr==2.1.11
-https://github.com/posativ/isso/archive/0.10.5.zip
+gunicorn
+passlib
+https://github.com/lll9p/isso/archive/master.zip
