@@ -16,7 +16,6 @@ from isso import config as isso_config
 
 application = make_app(isso_config.load('isso.conf'))
 
-print('LOADING MODULE %s' % __file__)
 
 
 def number_of_workers():
