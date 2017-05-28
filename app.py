@@ -16,13 +16,17 @@ from isso import config as isso_config
 
 SMTPUSRN = os.getenv('SMTPUSRN', '')
 SMTPPASS = os.getenv('SMTPPASS', '')
+MAILFROM = os.getenv('MAILFROM', '')
+MAILTO = os.getenv('MAILTO', '')
 ISSO_CONFIG_FILE = './isso.conf'
 
-with open(ISSO_CONFIG_FILE,'r') as f:
+with open(ISSO_CONFIG_FILE, 'r') as f:
     ISSO_CONFIG_STR = f.read()
-    ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('USERNAME',SMTPUSRN)
-    ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('PASSWORD',SMTPPASS)
-with open(ISSO_CONFIG_FILE,'w') as f:
+    ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('USERNAME', SMTPUSRN)
+    ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('PASSWORD', SMTPPASS)
+    ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('MAILFROM', MAILFROM)
+    ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('MAILTO', MAILTO)
+with open(ISSO_CONFIG_FILE, 'w') as f:
     f.write(ISSO_CONFIG_STR)
 
 
