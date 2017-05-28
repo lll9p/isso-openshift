@@ -1,3 +1,4 @@
+pip>=9.0
 isso
 gunicorn
 passlib
