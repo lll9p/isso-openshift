@@ -16,6 +16,8 @@ from isso import config as isso_config
 
 application = make_app(isso_config.load('isso.conf'))
 
+with open('isso.conf','r') as f:
+    print(f.read())
 
 
 def number_of_workers():
