@@ -14,10 +14,19 @@ from gunicorn.six import iteritems
 from isso import make_app
 from isso import config as isso_config
 
-application = make_app(isso_config.load('isso.conf'))
+SMTPUSRN = os.getenv('SMTPUSRN', '')
+SMTPPASS = os.getenv('SMTPPASS', '')
+ISSO_CONFIG_FILE = './isso.conf'
 
-with open('isso.conf','r') as f:
-    print(f.read())
+with open(ISSO_CONFIG_FILE,'r') as f:
+    ISSO_CONFIG_STR = f.read()
+    ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('USERNAME',SMTPUSRN)
+    ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('PASSWORD',SMTPPASS)
+with open(ISSO_CONFIG_FILE,'w') as f:
+    f.write(ISSO_CONFIG_STR)
+
+
+application = make_app(isso_config.load(ISSO_CONFIG_FILE))
 
 
 def number_of_workers():
