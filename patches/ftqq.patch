@@ -1,0 +1,14 @@
+    def notify(self, thread, comment):
+        try:
+            import urllib.request
+            import os
+            uri = local("host") + "/id/%i" % comment["id"]
+            key = self.isso.sign(comment["id"])
+            author = comment["author"] or "Anonymous"
+            headers = {'content-type': "application/x-www-form-urlencoded"}
+            req = urllib.request.Request(url='http://sc.ftqq.com/webhook/' + os.getenv('FTQQKEY', '') + '?TA_action_on=1&TA_title='+ str(author) + "&TA_content=" + str(comment["text"]) + "&TA_url_a=" + str(uri) + "/activate/" + str(key) + "&TA_url_r=" + str(uri) + "/delete/" + str(key) + "&TA_url_c=" + str(local("origin")) + str(thread["uri"]) + "#isso-" + str(comment["id"]), headers=headers)
+            with urllib.request.urlopen(req) as response:
+                pass
+            logger.info("ftqq:" + str(response.status) + " " + str(response.reason))
+        except Exception:
+            pass
