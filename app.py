@@ -21,8 +21,6 @@ MAILFROM = os.getenv('MAILFROM', '')
 MAILTO = os.getenv('MAILTO', '')
 ISSO_CONFIG_FILE = './isso.conf'
 ISSO_PATH = next(p for p in sys.path if 'site-packages' in p) + '/isso'
-with open('./patches/ftqq.patch', 'r') as f:
-    FTQQ_PATCH = f.read()
 with open(ISSO_CONFIG_FILE, 'r') as f:
     ISSO_CONFIG_STR = f.read()
     ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('USERNAME', SMTPUSRN)
@@ -31,11 +29,13 @@ with open(ISSO_CONFIG_FILE, 'r') as f:
     ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('MAILTO', MAILTO)
 with open(ISSO_CONFIG_FILE, 'w') as f:
     f.write(ISSO_CONFIG_STR)
-with open(ISSO_PATH + '/ext/notifications.py', 'r') as f:
-    file_strs = f.read().split(sep='    def notify(self, thread, comment):', maxsplit=2)
-file_str = file_strs[0] + FTQQ_PATCH + file_strs[1]
-with open(ISSO_PATH + '/ext/notifications.py', 'w') as f:
-    f.write(file_str)
+# with open('./patches/ftqq.patch', 'r') as f:
+#     FTQQ_PATCH = f.read()
+# with open(ISSO_PATH + '/ext/notifications.py', 'r') as f:
+#     file_strs = f.read().split(sep='    def notify(self, thread, comment):', maxsplit=2)
+# file_str = file_strs[0] + FTQQ_PATCH + file_strs[1]
+# with open(ISSO_PATH + '/ext/notifications.py', 'w') as f:
+#     f.write(file_str)
 
 application = make_app(isso_config.load(ISSO_CONFIG_FILE))
 
