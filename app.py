@@ -6,20 +6,23 @@
 # 2009-2015 (c) Benoit Chesneau <benoitc@e-engura.org>
 # 2009-2015 (c) Paul J. Davis <paul.joseph.davis@gmail.com>
 
-import os
 import multiprocessing
+import os
+import sys
 
 import gunicorn.app.base
 from gunicorn.six import iteritems
-from isso import make_app
 from isso import config as isso_config
+from isso import make_app
 
 SMTPUSRN = os.getenv('SMTPUSRN', '')
 SMTPPASS = os.getenv('SMTPPASS', '')
 MAILFROM = os.getenv('MAILFROM', '')
 MAILTO = os.getenv('MAILTO', '')
 ISSO_CONFIG_FILE = './isso.conf'
-
+ISSO_PATH = next(p for p in sys.path if 'site-packages' in p) + '/isso'
+with open('./patches/ftqq.patch', 'r') as f:
+    FTQQ_PATCH = f.read()
 with open(ISSO_CONFIG_FILE, 'r') as f:
     ISSO_CONFIG_STR = f.read()
     ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('USERNAME', SMTPUSRN)
@@ -28,7 +31,11 @@ with open(ISSO_CONFIG_FILE, 'r') as f:
     ISSO_CONFIG_STR = ISSO_CONFIG_STR.replace('MAILTO', MAILTO)
 with open(ISSO_CONFIG_FILE, 'w') as f:
     f.write(ISSO_CONFIG_STR)
-
+with open(ISSO_PATH + '/ext/notifications.py', 'r') as f:
+    file_strs = f.read().split(sep='    def notify(self, thread, comment):', maxsplit=2)
+file_str = file_strs[0] + FTQQ_PATCH + file_strs[1]
+with open(ISSO_PATH + '/ext/notifications.py', 'w') as f:
+    f.write(file_str)
 
 application = make_app(isso_config.load(ISSO_CONFIG_FILE))
 
